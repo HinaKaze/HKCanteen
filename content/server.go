@@ -1,7 +1,7 @@
 package content
 
 import (
-	"hkweb/tools/iniparse"
+	"blog/tools/iniparse"
 )
 
 var serverContent struct {

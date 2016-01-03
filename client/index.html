@@ -18,36 +18,32 @@
     <script src="js/jquery-1.11.3.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-    function showAlert(message) {
-        console.log("do it")
-        $("div#alert").text(message)
-            //$("div#alert").hide()
-            //return true
-    }
-    </script>
+    <script src="js/user.js"></script>
 </head>
+
 
 <body style="padding-top:50px">
     <div class="row">
-        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            未来这里会有一个侧边栏：TAG筛选，BLOG文件树结构，搜索栏等...
+        </div>
         <div class="col-md-8">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="http://www.baidu.com">NIGGER</a>
+                        <a class="navbar-brand" href="http://www.baidu.com">HinaBlog</a>
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="#a">nigger1</a></li>
-                            <li><a href="#a">nigger2</a></li>
-                            <li><a href="#a">nigger3</a></li>
+                            <li><a href="#a">func1</a></li>
+                            <li><a href="#a">func2</a></li>
+                            <li><a href="#a">func3</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">nigger kazoku<span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">sub-func1<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a onclick="showAlert('你真是zhazha')">big nigger</a></li>
-                                    <li><a href="#a">middle nigger</a></li>
-                                    <li><a href="#a">small nigger</a></li>
+                                    <li><a id="test-ajax">big func</a></li>
+                                    <li><a href="#a">sub-func2</a></li>
+                                    <li><a href="#a">sub-func3</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -85,11 +81,15 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+
+            <div id="blog-content"></div>
             <div>
                 <frame ></frame>
             </div>
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            这个地方以后放点什么东西我还没有想好的说...
+        </div>
     </div>
 </body>
 
