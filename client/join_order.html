@@ -1,0 +1,25 @@
+<div class="form-signin">
+	<button type="button" class="btn btn-lg btn-primary" id="meal_confirm">我要点饭</button>
+	<button type="button" class="btn btn-lg btn-danger" id="meal_cancel">我不点了</button>
+</div>
+
+<script>
+	$("#meal_confirm").click(function(){
+		$.get("/meal_confirm",function(data,status){
+				showAlert("报名成功")
+		});
+		$.get("/meal_list",function(data,status){
+				$("#right_list").html("<h3>今日点饭列表</h3>"+data)
+		});
+	});
+
+	$("#meal_cancel").click(function(){
+		$.get("/meal_cancel",function(data,status){
+			showAlert("取消成功")
+		});
+		$.get("/meal_list",function(data,status){
+				$("#right_list").html("<h3>今日点饭列表</h3>"+data)
+		});
+	});
+
+</script>

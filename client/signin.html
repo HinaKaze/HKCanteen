@@ -1,0 +1,23 @@
+<div class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="username" id="input_username" class="form-control" placeholder="Username" required autofocus>
+        <input type="password" id="input_password" class="form-control" placeholder="Password" required>
+        <!--<div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>-->
+        <button class="btn btn-lg btn-primary btn-block" id="sign_in_submit">Sign in</button>
+</div>
+
+<script>
+	$("#sign_in_submit").click(function(){
+		var username = $("#input_username").text()
+		var password = $("#input_password").text()
+		$("#alert_content").text("username:"+"admin"+"&password:"+"admin");
+//		console.log("username:"+username+"password:"+password)
+		$.get("/sign_in_submit?username=admin&password=admin",function(data,status){
+			$("#main_content").html(data);
+		});
+	});
+</script>
