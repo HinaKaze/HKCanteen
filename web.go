@@ -1,4 +1,3 @@
-// frgm
 package main
 
 import (
@@ -6,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"blog/content"
-	"blog/server/handler"
+	"HKCanteen/content"
+	"HKCanteen/server/handler"
 )
 
 var Quit chan int
@@ -38,5 +37,4 @@ func main() {
 	}
 	log.Println("WEB SERVER START")
 	<-Quit
-	//defer conn.Close()
 }

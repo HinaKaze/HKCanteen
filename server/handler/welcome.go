@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"HKCanteen/server/biz/user"
+
 	"github.com/gorilla/sessions"
 )
 
@@ -46,7 +48,9 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
 
-		if username == "admin" && password == "admin" {
+		result := user.Login(username, password)
+		switch result {
+		case user.ResultSuccess:
 			session, err := store.Get(r, "account")
 			if err != nil {
 				panic(err.Error())
@@ -54,6 +58,12 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 			session.Values["username"] = username
 			session.Save(r, w)
 			w.Write([]byte("登陆成功！！"))
+		case user.ResultNotMatch:
+			w.Write([]byte("账户密码不匹配！！"))
+		case user.ResultUserInvalid:
+			w.Write([]byte("用户不存在！！"))
+		default:
+			w.Write([]byte("未知错误！！"))
 		}
 	}
 }
@@ -65,7 +75,7 @@ func OrderMeal(w http.ResponseWriter, r *http.Request) {
 	}
 	_, ok := session.Values["username"]
 	if ok {
-		t, _ := template.ParseFiles("./client/order_meal.html")
+		t, _ := template.ParseFiles("./client/order.html")
 		t.Execute(w, nil)
 	} else {
 		w.Write([]byte("Nigger请登录"))

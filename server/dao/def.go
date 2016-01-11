@@ -5,6 +5,16 @@ import (
 	"time"
 )
 
+var canteenDBConn *sql.DB
+
+func Init(db *sql.DB) {
+	canteenDBConn = db
+}
+
+func GetDBConn() *sql.DB {
+	return canteenDBConn
+}
+
 type DAOI interface {
 	SaveToDB(db *sql.DB) error
 	UpdateToDB(db *sql.DB) error
@@ -13,14 +23,14 @@ type DAOI interface {
 
 type DAOUser struct {
 	Id            int64
-	UserName      string
+	Username      string
 	Password      string
 	NickName      string
 	AccountAmount float64 //账户余额总额
 }
 
 func (r *DAOUser) SaveToDB(db *sql.DB) error {
-	result, err := db.Exec("Insert into user (username,password,nickname) values (?,?,?)", r.UserName, r.Password, r.NickName)
+	result, err := db.Exec("Insert into user (username,password,nickname) values (?,?,?)", r.Username, r.Password, r.NickName)
 	if err != nil {
 		return err
 	}
@@ -33,7 +43,7 @@ func (r *DAOUser) SaveToDB(db *sql.DB) error {
 }
 
 func (r *DAOUser) UpdateToDB(db *sql.DB) error {
-	result, err := db.Exec("Update user set username=?,password=?,nickname=? where id=?", r.UserName, r.Password, r.NickName, r.Id)
+	result, err := db.Exec("Update user set username=?,password=?,nickname=? where id=?", r.Username, r.Password, r.NickName, r.Id)
 	if err != nil {
 		return err
 	}
@@ -51,7 +61,7 @@ func (r *DAOUser) FetchFromDB(db *sql.DB, id int) error {
 	}
 	defer rows.Close()
 	if rows.Next() {
-		err = rows.Scan(&r.Id, &r.UserName, &r.Password, &r.NickName)
+		err = rows.Scan(&r.Id, &r.Username, &r.Password, &r.NickName)
 		if err != nil {
 			return err
 		}

@@ -1,7 +1,7 @@
 package meal
 
 import (
-	"blog/server/dao"
+	"HKCanteen/server/dao"
 	"time"
 )
 
