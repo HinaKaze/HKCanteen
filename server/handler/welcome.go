@@ -2,7 +2,6 @@ package handler
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 
 	"HKCanteen/server/biz/user"
@@ -10,7 +9,6 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-var orderedAccouts map[interface{}]string = make(map[interface{}]string)
 var store = sessions.NewCookieStore([]byte("23333"))
 
 func Welcome(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +46,7 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
 
-		result := user.Login(username, password)
+		userid, result := user.Login(username, password)
 		switch result {
 		case user.ResultSuccess:
 			session, err := store.Get(r, "account")
@@ -56,6 +54,7 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 				panic(err.Error())
 			}
 			session.Values["username"] = username
+			session.Values["userid"] = userid
 			session.Save(r, w)
 			w.Write([]byte("登陆成功！！"))
 		case user.ResultNotMatch:
@@ -82,48 +81,67 @@ func OrderMeal(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func MealConfirm(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "account")
-	if err != nil {
-		panic(err.Error())
-	}
-	name, ok := session.Values["username"]
-	if ok {
-		orderedAccouts[name] = "ok"
-		log.Printf("[%+v]\n", orderedAccouts)
-		t, _ := template.ParseFiles("./client/order_meal.html")
-		t.Execute(w, nil)
-	} else {
-		w.Write([]byte("Nigger请登录"))
-	}
+//func MealConfirm(w http.ResponseWriter, r *http.Request) {
+//	session, err := store.Get(r, "account")
+//	if err != nil {
+//		panic(err.Error())
+//	}
+//	name, ok := session.Values["username"]
+//	if ok {
+//		orderedAccouts[name] = "ok"
+//		log.Printf("[%+v]\n", orderedAccouts)
+//		t, _ := template.ParseFiles("./client/order_meal.html")
+//		t.Execute(w, nil)
+//	} else {
+//		w.Write([]byte("Nigger请登录"))
+//	}
 
-}
+//}
 
-func MealCancel(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "account")
-	if err != nil {
-		panic(err.Error())
-	}
-	name, ok := session.Values["username"]
-	if ok {
-		delete(orderedAccouts, name)
-		t, _ := template.ParseFiles("./client/order_meal.html")
-		t.Execute(w, nil)
-	} else {
-		w.Write([]byte("Nigger请登录"))
-	}
-}
+//func MealCancel(w http.ResponseWriter, r *http.Request) {
+//	session, err := store.Get(r, "account")
+//	if err != nil {
+//		panic(err.Error())
+//	}
+//	name, ok := session.Values["username"]
+//	if ok {
+//		delete(orderedAccouts, name)
+//		t, _ := template.ParseFiles("./client/order_meal.html")
+//		t.Execute(w, nil)
+//	} else {
+//		w.Write([]byte("Nigger请登录"))
+//	}
+//}
 
-func MealList(w http.ResponseWriter, r *http.Request) {
-	htmlStr := ""
-	log.Printf("[%+v]\n", orderedAccouts)
-	for a := range orderedAccouts {
-		aStr, _ := a.(string)
-		htmlStr += "<p>" + aStr + "</p>"
-	}
-	w.Write([]byte(htmlStr))
-}
+//func MealList(w http.ResponseWriter, r *http.Request) {
+//	htmlStr := ""
+//	log.Printf("[%+v]\n", orderedAccouts)
+//	for a := range orderedAccouts {
+//		aStr, _ := a.(string)
+//		htmlStr += "<p>" + aStr + "</p>"
+//	}
+//	w.Write([]byte(htmlStr))
+//}
 
 func Favicon(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(" "))
+}
+
+func IsLogin(r *http.Request) bool {
+	session, err := store.Get(r, "account")
+	if err != nil {
+		panic(err.Error())
+	}
+	_, ok := session.Values["username"]
+	return ok
+}
+
+func GetUserId(r *http.Request) int64 {
+	session, err := store.Get(r, "account")
+	if err != nil {
+		panic(err.Error())
+	}
+	val, _ := session.Values["userid"]
+	userid, _ := val.(int64)
+	return userid
 }

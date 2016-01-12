@@ -11,15 +11,15 @@ const (
 	ResultUserInvalid = 3
 )
 
-func Login(username string, password string) int {
+func Login(username string, password string) (userId int64, result int) {
 	u := dao.GetUserByUsername(username)
 	log.Printf("u[%+v]", u)
 	if u.Id <= 0 {
-		return ResultUserInvalid
+		return -1, ResultUserInvalid
 	}
 	if u.Username == username && u.Password == password {
-		return ResultSuccess
+		return u.Id, ResultSuccess
 	} else {
-		return ResultNotMatch
+		return -1, ResultNotMatch
 	}
 }

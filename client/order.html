@@ -1,5 +1,22 @@
+
+
 <div class="form-signin">
     <h2 class="form-signin-heading">发起活动</h2>
-    <input id="input_username" class="form-control" placeholder="描述" required autofocus>
+    <input id="input_order_desc" class="form-control" placeholder="描述" required autofocus>
     <button class="btn btn-lg btn-primary btn-block" id="order_submit">提交</button>
 </div>
+
+<script>
+	$.get("/order_list",function(data,status){
+				$("#right_list").html(data)
+	});
+	$("#order_submit").click(function(){
+		var desc = $("#input_order_desc").val()
+		$.get("/order_submit?desc="+desc,function(data,status){
+				showAlert("提交成功")
+		});
+		$.get("/order_list",function(data,status){
+				$("#right_list").html(data)
+		});
+	});
+</script>
