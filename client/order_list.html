@@ -30,7 +30,7 @@
 	});
 	$("#applicant_list{{.Order.Id}}").click(function(){
 		var orderid = $("#order_id{{.Order.Id}}").text()
-		$.get("/applicant_list?orderid="+orderid,function(data,status){
+		$.get("/order_detail?orderid="+orderid,function(data,status){
 				showAlert("睁大你狗眼看看");
 				$("#main_content").html(data);
 		});

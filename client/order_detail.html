@@ -1,0 +1,50 @@
+<div class="form-signin">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><text id="order_id{{.Order.Order.Id}}">{{.Order.Order.Id}}</text>{{.Order.Order.Desc}}</h3>
+        </div>
+        <div class="panel-body">
+            <p>发起人:{{.Order.Creator.NickName}}</p>
+            <p>描述:{{.Order.Order.Desc}}</p>
+            <p>状态:{{.Order.Order.Status}}</p>
+            <p>创建时间:{{.Order.Order.Time}}</p>
+            <p>总价:￥{{.Order.Order.TotalPrice}}</p>
+        </div>
+    </div>
+    <br/>
+    <h2>参与者列表</h2>
+    {{range .Order.Applicants}}
+    <p>{{.User.NickName}} : {{.Applicant.Status}}</p>
+    {{end}} 
+    {{if .StatusFlag.Pending}}
+    <br/>
+    <input  type="username" id="total_price" class="form-control" placeholder="输入订单总价" required autofocus>
+    <button class="btn btn-lg btn-success" id="order_run">进行下一步</button>
+    <button class="btn btn-lg btn-danger" id="order_close">关闭订单</button>
+    <script>
+    $("#order_run").click(function(){
+        var orderid = $("#order_id{{.Order.Order.Id}}").text()
+        var totalprice = $("#total_price").val()
+        $.get("/order_run?orderid="+orderid+"&totalprice="+totalprice,null);
+    });
+     $("#order_close").click(function(){
+        var orderid = $("#order_id{{.Order.Order.Id}}").text()
+        $.get("/order_close?orderid="+orderid,null);
+    });
+    </script>
+    {{end}} 
+    {{if .StatusFlag.Running}}
+    <button class="btn btn-lg btn-success" id="order_finish">完成订单</button>
+    <script>
+    $("#order_finish").click(function(){
+        var orderid = $("#order_id{{.Order.Order.Id}}").text()
+        $.get("/order_finish?orderid="+orderid,null);
+    });
+    </script>
+    {{end}} 
+
+    {{if .StatusFlag.Closed}}
+    <span class="label label-success">订单已关闭</span> {{end}} 
+    {{if .StatusFlag.Finished}}
+    <span class="label label-success">订单已完成</span> {{end}}
+</div>

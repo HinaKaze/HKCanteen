@@ -2,6 +2,7 @@ package dao
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -30,7 +31,7 @@ func (r *DAOOrder) SaveToDB() error {
 }
 
 func (r *DAOOrder) UpdateToDB() error {
-	result, err := GetDBConn().Exec("Update `order` set userid=?,payerid=?,inventoryid=?,desc=?,`status`=?,totalprice=?,time=? where id=?", r.UserId, r.PayerId, r.InventoryId, r.Desc, r.Status, r.TotalPrice, r.Time, r.Id)
+	result, err := GetDBConn().Exec("Update `order` set userid=?,payerid=?,inventoryid=?,`desc`=?,`status`=?,totalprice=?,time=? where id=?", r.UserId, r.PayerId, r.InventoryId, r.Desc, r.Status, r.TotalPrice, r.Time, r.Id)
 	if err != nil {
 		return err
 	}
@@ -42,7 +43,7 @@ func (r *DAOOrder) UpdateToDB() error {
 }
 
 func (r *DAOOrder) FetchFromDB(id int64) error {
-	rows, err := GetDBConn().Query("select id,userid,payerid,inventoryid,`desc`,`status`,totalprice,time from order where id=?", id)
+	rows, err := GetDBConn().Query("select id,userid,payerid,inventoryid,`desc`,`status`,totalprice,time from `order` where id=?", id)
 	if err != nil {
 		return err
 	}
@@ -52,6 +53,7 @@ func (r *DAOOrder) FetchFromDB(id int64) error {
 		if err != nil {
 			return err
 		}
+		r.TotalPrice, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", r.TotalPrice), 64)
 	}
 	return nil
 }

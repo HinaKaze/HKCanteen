@@ -68,7 +68,7 @@ func QuitOrder(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetApplicants(w http.ResponseWriter, r *http.Request) {
+func OrderDetail(w http.ResponseWriter, r *http.Request) {
 	if IsLogin(r) {
 		err := r.ParseForm()
 		if err != nil {
@@ -76,9 +76,79 @@ func GetApplicants(w http.ResponseWriter, r *http.Request) {
 		}
 		orderIdStr := r.Form.Get("orderid")
 		orderId, _ := strconv.Atoi(orderIdStr)
-		applicants := applicant.GetApplicantsByOrderId(int64(orderId))
-		t, _ := template.ParseFiles("./client/applicant_list.html")
-		t.Execute(w, applicants)
+
+		var resp struct {
+			Order      order.Order
+			StatusFlag struct {
+				Pending  bool
+				Running  bool
+				Closed   bool
+				Finished bool
+			}
+		}
+		resp.Order = order.GetOrderDetail(int64(orderId))
+		if resp.Order.Order.Status == "pending" {
+			resp.StatusFlag.Pending = true
+		} else if resp.Order.Order.Status == "running" {
+			resp.StatusFlag.Running = true
+		} else if resp.Order.Order.Status == "closed" {
+			resp.StatusFlag.Closed = true
+		} else if resp.Order.Order.Status == "finished" {
+			resp.StatusFlag.Finished = true
+		}
+
+		t, err := template.ParseFiles("./client/order_detail.html")
+		if err != nil {
+			panic(err.Error())
+		}
+		t.Execute(w, resp)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func OrderRun(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		err := r.ParseForm()
+		if err != nil {
+			panic(err.Error())
+		}
+		orderIdStr := r.Form.Get("orderid")
+		orderId, _ := strconv.ParseInt(orderIdStr, 10, 64)
+		totalPriceStr := r.Form.Get("totalprice")
+		totalPrice, _ := strconv.ParseFloat(totalPriceStr, 64)
+		order.OrderRun(orderId, totalPrice)
+		w.Write([]byte{})
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func OrderFinish(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		err := r.ParseForm()
+		if err != nil {
+			panic(err.Error())
+		}
+		orderIdStr := r.Form.Get("orderid")
+		orderId, _ := strconv.Atoi(orderIdStr)
+		order.OrderFinish(int64(orderId))
+		w.Write([]byte{})
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func OrderClose(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		err := r.ParseForm()
+		if err != nil {
+			panic(err.Error())
+		}
+		orderIdStr := r.Form.Get("orderid")
+		orderId, _ := strconv.Atoi(orderIdStr)
+		order.OrderClose(int64(orderId))
+		w.Write([]byte{})
 	} else {
 		w.Write([]byte("Nigger请登录"))
 	}

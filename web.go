@@ -31,7 +31,10 @@ func main() {
 
 	http.HandleFunc("/order_join", handler.JoinOrder)
 	http.HandleFunc("/order_quit", handler.QuitOrder)
-	http.HandleFunc("/applicant_list", handler.GetApplicants)
+	http.HandleFunc("/order_detail", handler.OrderDetail)
+	http.HandleFunc("/order_run", handler.OrderRun)
+	http.HandleFunc("/order_finish", handler.OrderFinish)
+	http.HandleFunc("/order_close", handler.OrderClose)
 
 	http.HandleFunc("/favicon.ico", handler.Favicon)
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("./client/img"))))
