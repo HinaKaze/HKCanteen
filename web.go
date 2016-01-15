@@ -22,12 +22,13 @@ func main() {
 	http.HandleFunc("/", handler.Welcome)
 	http.HandleFunc("/sign_in", handler.Signin)
 	http.HandleFunc("/sign_in_submit", handler.SigninSubmit)
-	http.HandleFunc("/order_meal", handler.OrderMeal)
+	http.HandleFunc("/order_manage", handler.OrderManage)
 	//http.HandleFunc("/meal_confirm", handler.MealConfirm)
 	//http.HandleFunc("/meal_cancel", handler.MealCancel)
 	//http.HandleFunc("/meal_list", handler.MealList)
 	http.HandleFunc("/order_submit", handler.CreateOrder)
 	http.HandleFunc("/order_list", handler.OrderList)
+	http.HandleFunc("/order_own_list", handler.MyOrderList)
 
 	http.HandleFunc("/order_join", handler.JoinOrder)
 	http.HandleFunc("/order_quit", handler.QuitOrder)
@@ -35,6 +36,10 @@ func main() {
 	http.HandleFunc("/order_run", handler.OrderRun)
 	http.HandleFunc("/order_finish", handler.OrderFinish)
 	http.HandleFunc("/order_close", handler.OrderClose)
+
+	http.HandleFunc("/fuli_list", handler.FuliList)
+
+	http.HandleFunc("/account_detail", handler.GetMyAccountLog)
 
 	http.HandleFunc("/favicon.ico", handler.Favicon)
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("./client/img"))))

@@ -1,0 +1,49 @@
+<div class="form-signin">
+    <h3>已参与的活动</h3> {{range .}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><text id="order_id{{.Order.Id}}">{{.Order.Id}}</text>     {{.Order.Desc}}</h3>
+        </div>
+        <div class="panel-body">
+            <p>发起人:{{.Creator.NickName}}</p>
+            <p>描述:{{.Order.Desc}}</p>
+            <p>状态:{{.Order.Status}}</p>
+            <p>创建时间:{{.Order.Time}}</p>
+        </div>
+        <button type="button" class="btn btn-sm btn-info text-center" id="applicant_list{{.Order.Id}}" data-target="#myModal" data-toggle="modal">查看详情</button>
+    </div>
+    <script>
+    $("#applicant_list{{.Order.Id}}").click(function() {
+        var orderid = $("#order_id{{.Order.Id}}").text()
+        $.get("/order_detail?orderid=" + orderid, function(data, status) {
+            showAlert("我已经不想说话了");
+            $("#model_body").html(data);
+        });
+    });
+    </script>
+    {{end}}
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="model-close">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+                </div>
+                <div class="modal-body" id="model_body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="model-close">关闭</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+        <script>
+        $("#model-close").click(function() {
+            $("#model_body").html("")
+        });
+        </script>
+    </div>

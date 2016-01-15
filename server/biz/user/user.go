@@ -2,7 +2,6 @@ package user
 
 import (
 	"HKCanteen/server/dao"
-	"log"
 )
 
 const (
@@ -11,15 +10,14 @@ const (
 	ResultUserInvalid = 3
 )
 
-func Login(username string, password string) (userId int64, result int) {
-	u := dao.GetUserByUsername(username)
-	log.Printf("u[%+v]", u)
-	if u.Id <= 0 {
-		return -1, ResultUserInvalid
+func Login(username string, password string) (user dao.DAOUser, result int) {
+	user = dao.GetUserByUsername(username)
+	if user.Id <= 0 {
+		return user, ResultUserInvalid
 	}
-	if u.Username == username && u.Password == password {
-		return u.Id, ResultSuccess
+	if user.Username == username && user.Password == password {
+		return user, ResultSuccess
 	} else {
-		return -1, ResultNotMatch
+		return user, ResultNotMatch
 	}
 }

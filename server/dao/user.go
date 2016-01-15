@@ -6,10 +6,11 @@ type DAOUser struct {
 	Password      string
 	NickName      string
 	AccountAmount float64 //账户余额总额
+	Privilege     int     //
 }
 
 func (r *DAOUser) SaveToDB() error {
-	result, err := GetDBConn().Exec("Insert into user (username,password,nickname) values (?,?,?)", r.Username, r.Password, r.NickName)
+	result, err := GetDBConn().Exec("Insert into user (username,password,nickname,accountamount,privilege) values (?,?,?,?,?)", r.Username, r.Password, r.NickName, r.AccountAmount, r.Privilege)
 	if err != nil {
 		return err
 	}
@@ -22,7 +23,7 @@ func (r *DAOUser) SaveToDB() error {
 }
 
 func (r *DAOUser) UpdateToDB() error {
-	result, err := GetDBConn().Exec("Update user set username=?,password=?,nickname=? where id=?", r.Username, r.Password, r.NickName, r.Id)
+	result, err := GetDBConn().Exec("Update user set username=?,password=?,nickname=?,accountamount=?,privilege=? where id=?", r.Username, r.Password, r.NickName, r.AccountAmount, r.Privilege, r.Id)
 	if err != nil {
 		return err
 	}
@@ -34,13 +35,13 @@ func (r *DAOUser) UpdateToDB() error {
 }
 
 func (r *DAOUser) FetchFromDB(id int64) error {
-	rows, err := GetDBConn().Query("select id,username,password,nickname from user where id=?", id)
+	rows, err := GetDBConn().Query("select id,username,password,nickname,accountamount,privilege from user where id=?", id)
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 	if rows.Next() {
-		err = rows.Scan(&r.Id, &r.Username, &r.Password, &r.NickName)
+		err = rows.Scan(&r.Id, &r.Username, &r.Password, &r.NickName, &r.AccountAmount, &r.Privilege)
 		if err != nil {
 			return err
 		}
@@ -49,14 +50,14 @@ func (r *DAOUser) FetchFromDB(id int64) error {
 }
 
 func GetUserByUsername(username string) (user DAOUser) {
-	sql := `select id,username,password,nickname from user where username=? `
+	sql := `select id,username,password,nickname,accountamount,privilege from user where username=? `
 	rows, err := canteenDBConn.Query(sql, username)
 	if err != nil {
 		panic(err.Error())
 	}
 	defer rows.Close()
 	if rows.Next() {
-		err = rows.Scan(&user.Id, &user.Username, &user.Password, &user.NickName)
+		err = rows.Scan(&user.Id, &user.Username, &user.Password, &user.NickName, &user.AccountAmount, &user.Privilege)
 		if err != nil {
 			panic(err.Error())
 		}

@@ -10,11 +10,18 @@ type Applicant struct {
 }
 
 func JoinOrder(userId int64, orderId int64) (result int) {
-	//	var order dao.DAOOrder
-	//	order.FetchFromDB(orderId)
-	//	if order.Id <= 0 {
-	//		return 0
-	//	}
+	var order dao.DAOOrder
+	err := order.FetchFromDB(orderId)
+	if err != nil {
+		panic(err.Error())
+	}
+	if order.Id <= 0 {
+		return 0
+	}
+	if order.Status != "pending" {
+		return 0
+	}
+
 	applicant := dao.GetApplicantByOrderId(userId, orderId)
 	if applicant.Id > 0 {
 		if applicant.Status != "join" {
@@ -36,15 +43,27 @@ func QuitOrder(userId int64, orderId int64) (result int) {
 	//	if order.Id <= 0 {
 	//		return 0
 	//	}
+	var order dao.DAOOrder
+	err := order.FetchFromDB(orderId)
+	if err != nil {
+		panic(err.Error())
+	}
+	if order.Id <= 0 {
+		return 0
+	}
+	if order.Status != "pending" {
+		return 0
+	}
+
 	applicant := dao.GetApplicantByOrderId(userId, orderId)
 	if applicant.Id > 0 {
-		if applicant.Status != "quit" {
-			applicant.Status = "quit"
+		if applicant.Status != "pass" {
+			applicant.Status = "pass"
 			applicant.UpdateToDB()
 		}
 	} else {
 		applicant.OrderId = orderId
-		applicant.Status = "quit"
+		applicant.Status = "pass"
 		applicant.UserId = userId
 		applicant.SaveToDB()
 	}

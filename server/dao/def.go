@@ -21,14 +21,6 @@ type DAOI interface {
 	FetchFromDB(db *sql.DB, id int) error
 }
 
-type DAOAccountLog struct {
-	Id     int64
-	UserId int64
-	Type   string //withdraw,charge,spend...
-	Number float64
-	Time   time.Time
-}
-
 type DAOInventory struct {
 	Id           int64
 	Desc         string

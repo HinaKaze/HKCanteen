@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"HKCanteen/server/biz/accountlog"
 	"HKCanteen/server/biz/applicant"
 	"HKCanteen/server/biz/order"
 )
@@ -32,6 +33,16 @@ func OrderList(w http.ResponseWriter, r *http.Request) {
 	if IsLogin(r) {
 		orders := order.GetRunningOrderList()
 		t, _ := template.ParseFiles("./client/order_list.html")
+		t.Execute(w, orders)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func MyOrderList(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		orders := order.GetMyOrderList(GetUserId(r))
+		t, _ := template.ParseFiles("./client/order_own_list.html")
 		t.Execute(w, orders)
 	} else {
 		w.Write([]byte("Nigger请登录"))
@@ -80,10 +91,11 @@ func OrderDetail(w http.ResponseWriter, r *http.Request) {
 		var resp struct {
 			Order      order.Order
 			StatusFlag struct {
-				Pending  bool
-				Running  bool
-				Closed   bool
-				Finished bool
+				IsCreator bool
+				Pending   bool
+				Running   bool
+				Closed    bool
+				Finished  bool
 			}
 		}
 		resp.Order = order.GetOrderDetail(int64(orderId))
@@ -95,6 +107,9 @@ func OrderDetail(w http.ResponseWriter, r *http.Request) {
 			resp.StatusFlag.Closed = true
 		} else if resp.Order.Order.Status == "finished" {
 			resp.StatusFlag.Finished = true
+		}
+		if resp.Order.Creator.Id == GetUserId(r) {
+			resp.StatusFlag.IsCreator = true
 		}
 
 		t, err := template.ParseFiles("./client/order_detail.html")
@@ -149,6 +164,19 @@ func OrderClose(w http.ResponseWriter, r *http.Request) {
 		orderId, _ := strconv.Atoi(orderIdStr)
 		order.OrderClose(int64(orderId))
 		w.Write([]byte{})
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func GetMyAccountLog(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		accountLog := accountlog.GetMyAccountLog(GetUserId(r))
+		t, err := template.ParseFiles("./client/account_log.html")
+		if err != nil {
+			panic(err.Error())
+		}
+		t.Execute(w, accountLog)
 	} else {
 		w.Write([]byte("Nigger请登录"))
 	}

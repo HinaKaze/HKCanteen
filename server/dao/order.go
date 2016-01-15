@@ -82,3 +82,23 @@ func GetOrderList(status ...string) (orders []DAOOrder) {
 	}
 	return
 }
+
+func GetMyOrderList(userid int64) (orders []DAOOrder) {
+
+	sql := "select o.id,o.userid,o.payerid,o.inventoryid,o.`desc`,o.`status`,o.totalprice,o.time from  `order` as o,applicant as a where a.userid = ? and a.orderid = o.id and a.status <> \"pass\" order by o.id desc"
+
+	rows, err := GetDBConn().Query(sql, userid)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var r DAOOrder
+		err = rows.Scan(&r.Id, &r.UserId, &r.PayerId, &r.InventoryId, &r.Desc, &r.Status, &r.TotalPrice, &r.Time)
+		if err != nil {
+			panic(err.Error())
+		}
+		orders = append(orders, r)
+	}
+	return
+}

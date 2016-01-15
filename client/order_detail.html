@@ -14,10 +14,13 @@
     <br/>
     <h2>参与者列表</h2>
     {{range .Order.Applicants}}
-    <p>{{.User.NickName}} : {{.Applicant.Status}}</p>
+    <p>{{.User.NickName}} : {{.Applicant.Status}} 花费:￥{{.Applicant.Pay}}</p>
     {{end}} 
+
+    {{if .StatusFlag.IsCreator}}
     {{if .StatusFlag.Pending}}
     <br/>
+    
     <input  type="username" id="total_price" class="form-control" placeholder="输入订单总价" required autofocus>
     <button class="btn btn-lg btn-success" id="order_run">进行下一步</button>
     <button class="btn btn-lg btn-danger" id="order_close">关闭订单</button>
@@ -33,6 +36,9 @@
     });
     </script>
     {{end}} 
+    {{end}}
+
+    {{if .StatusFlag.IsCreator}}
     {{if .StatusFlag.Running}}
     <button class="btn btn-lg btn-success" id="order_finish">完成订单</button>
     <script>
@@ -42,7 +48,13 @@
     });
     </script>
     {{end}} 
+    {{end}}
 
+    <br/>
+    {{if .StatusFlag.Pending}}
+    <span class="label label-success">正在募集中</span> {{end}} 
+    {{if .StatusFlag.Running}}
+    <span class="label label-success">正在进行中</span> {{end}} 
     {{if .StatusFlag.Closed}}
     <span class="label label-success">订单已关闭</span> {{end}} 
     {{if .StatusFlag.Finished}}

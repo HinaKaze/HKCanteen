@@ -1,0 +1,8 @@
+<div class="form-signin">
+	<h2>账户余额 : ￥{{.User.AccountAmount}}</h2>
+	<br/>
+	<h3>账户日志</h3>
+	{{range .Logs}}
+		<h5>Id:{{.Id}} 活动编号:{{.OrderId}} 行为:{{.Type}} 数额:￥{{.Value}} 时间:{{.Time}}</h5>
+	{{end}}
+</div>

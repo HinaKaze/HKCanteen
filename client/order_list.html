@@ -1,9 +1,11 @@
 <div class="form-signin">
-	<h3>可参与的活动</h3>
-{{range .}}
+    <button class="btn btn-sm btn-info center-block" id="order_list">刷新活动列表</button>
+    <br/>
+    <h3>可参与的活动</h3> 
+    {{range .}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><text id="order_id{{.Order.Id}}">{{.Order.Id}}</text>{{.Order.Desc}}</h3>
+            <h3 class="panel-title"><text id="order_id{{.Order.Id}}">{{.Order.Id}}</text>     {{.Order.Desc}}</h3>
         </div>
         <div class="panel-body">
             <p>发起人:{{.Creator.NickName}}</p>
@@ -13,29 +15,36 @@
         </div>
         <button type="button" class="btn btn-sm btn-primary text-center" id="order_join{{.Order.Id}}">参加</button>
         <button type="button" class="btn btn-sm btn-danger text-center" id="order_quit{{.Order.Id}}">取消</button>
-        <button type="button" class="btn btn-sm btn-info text-center" id="applicant_list{{.Order.Id}}" >查看参与者</button>
+        <button type="button" class="btn btn-sm btn-info text-center" id="applicant_list{{.Order.Id}}">查看详情</button>
     </div>
     <script>
-	$("#order_join{{.Order.Id}}").click(function(){
-		var orderid = $("#order_id{{.Order.Id}}").text()
-		$.get("/order_join?orderid="+orderid,function(data,status){
-				showAlert("参加成功")
-		});
-	});
-	$("#order_quit{{.Order.Id}}").click(function(){
-		var orderid = $("#order_id{{.Order.Id}}").text()
-		$.get("/order_quit?orderid="+orderid,function(data,status){
-				showAlert("取消成功")
-		});
-	});
-	$("#applicant_list{{.Order.Id}}").click(function(){
-		var orderid = $("#order_id{{.Order.Id}}").text()
-		$.get("/order_detail?orderid="+orderid,function(data,status){
-				showAlert("睁大你狗眼看看");
-				$("#main_content").html(data);
-		});
-	});
-</script>
- {{end}}
+    $("#order_join{{.Order.Id}}").click(function() {
+        var orderid = $("#order_id{{.Order.Id}}").text()
+        $.get("/order_join?orderid=" + orderid, function(data, status) {
+            showAlert("参加成功")
+        });
+    });
+    $("#order_quit{{.Order.Id}}").click(function() {
+        var orderid = $("#order_id{{.Order.Id}}").text()
+        $.get("/order_quit?orderid=" + orderid, function(data, status) {
+            showAlert("取消成功")
+        });
+    });
+    $("#applicant_list{{.Order.Id}}").click(function() {
+        var orderid = $("#order_id{{.Order.Id}}").text()
+        $.get("/order_detail?orderid=" + orderid, function(data, status) {
+            showAlert("睁大你狗眼看看");
+            $("#main_content").html(data);
+        });
+    });
+    </script>
+    {{end}}
 </div>
 
+<script>
+	$("#order_list").click(function(){
+		$.get("/order_list",function(data,status){
+			$("#right_list").html(data);
+		})
+	})
+</script>

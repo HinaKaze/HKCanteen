@@ -50,6 +50,34 @@ func OrderFinish(orderId int64) (order dao.DAOOrder) {
 	order.FetchFromDB(orderId)
 	order.Status = "finished"
 	order.UpdateToDB()
+
+	var payerCount int
+	applicants := applicant.GetApplicantsByOrderId(orderId)
+	for i := range applicants {
+		if applicants[i].Applicant.Status == "join" {
+			payerCount++
+		}
+	}
+	var averagePay float64 = order.TotalPrice / float64(payerCount)
+
+	for i := range applicants {
+		if applicants[i].Applicant.Status == "join" {
+			//update applicant info
+			applicants[i].Applicant.Pay = averagePay
+			applicants[i].Applicant.UpdateToDB()
+			//add new log
+			var log dao.DAOAccountLog
+			log.UserId = applicants[i].Applicant.UserId
+			log.Type = "spend"
+			log.Time = time.Now()
+			log.Value = averagePay
+			log.OrderId = applicants[i].Applicant.OrderId
+			log.SaveToDB()
+			//update user account amount
+			applicants[i].User.AccountAmount -= averagePay
+			applicants[i].User.UpdateToDB()
+		}
+	}
 	return
 }
 
@@ -61,7 +89,18 @@ func OrderClose(orderId int64) (order dao.DAOOrder) {
 }
 
 func GetRunningOrderList() (orders []Order) {
-	daoOrders := dao.GetOrderList("pending", "waiting")
+	daoOrders := dao.GetOrderList("pending", "running")
+	for i := range daoOrders {
+		var o Order
+		o.Creator.FetchFromDB(daoOrders[i].UserId)
+		o.Order = daoOrders[i]
+		orders = append(orders, o)
+	}
+	return
+}
+
+func GetMyOrderList(userid int64) (orders []Order) {
+	daoOrders := dao.GetMyOrderList(userid)
 	for i := range daoOrders {
 		var o Order
 		o.Creator.FetchFromDB(daoOrders[i].UserId)

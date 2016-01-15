@@ -2,7 +2,9 @@ package handler
 
 import (
 	"html/template"
+	"log"
 	"net/http"
+	"strconv"
 
 	"HKCanteen/server/biz/user"
 
@@ -46,15 +48,18 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
 
-		userid, result := user.Login(username, password)
+		myself, result := user.Login(username, password)
 		switch result {
 		case user.ResultSuccess:
 			session, err := store.Get(r, "account")
 			if err != nil {
 				panic(err.Error())
 			}
-			session.Values["username"] = username
-			session.Values["userid"] = userid
+			session.Values["username"] = myself.Username
+			session.Values["userid"] = myself.Id
+			session.Values["nickname"] = myself.NickName
+			session.Values["privilege"] = myself.Privilege
+			log.Println("Pri" + strconv.Itoa(myself.Privilege))
 			session.Save(r, w)
 			w.Write([]byte("登陆成功！！"))
 		case user.ResultNotMatch:
@@ -67,13 +72,21 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func OrderMeal(w http.ResponseWriter, r *http.Request) {
+func OrderManage(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "account")
 	if err != nil {
 		panic(err.Error())
 	}
+
 	_, ok := session.Values["username"]
 	if ok {
+		pi, _ := session.Values["privilege"]
+		privilege, _ := pi.(int)
+		log.Println("Pri   dd" + strconv.Itoa(privilege))
+		if privilege < 1 {
+			w.Write([]byte("你没有发起活动的权限"))
+			return
+		}
 		t, _ := template.ParseFiles("./client/order.html")
 		t.Execute(w, nil)
 	} else {
@@ -122,6 +135,20 @@ func OrderMeal(w http.ResponseWriter, r *http.Request) {
 //	}
 //	w.Write([]byte(htmlStr))
 //}
+
+func FuliList(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "account")
+	if err != nil {
+		panic(err.Error())
+	}
+	_, ok := session.Values["username"]
+	if ok {
+		t, _ := template.ParseFiles("./client/fuli_list.html")
+		t.Execute(w, nil)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
 
 func Favicon(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(" "))
