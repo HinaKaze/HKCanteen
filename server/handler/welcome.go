@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"HKCanteen/server/biz/user"
+	"HKCanteen/server/common"
 
 	"github.com/gorilla/sessions"
 )
@@ -69,28 +70,6 @@ func SigninSubmit(w http.ResponseWriter, r *http.Request) {
 		default:
 			w.Write([]byte("未知错误！！"))
 		}
-	}
-}
-
-func OrderManage(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "account")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	_, ok := session.Values["username"]
-	if ok {
-		pi, _ := session.Values["privilege"]
-		privilege, _ := pi.(int)
-		log.Println("Pri   dd" + strconv.Itoa(privilege))
-		if privilege < 1 {
-			w.Write([]byte("你没有发起活动的权限"))
-			return
-		}
-		t, _ := template.ParseFiles("./client/order.html")
-		t.Execute(w, nil)
-	} else {
-		w.Write([]byte("Nigger请登录"))
 	}
 }
 
@@ -161,6 +140,26 @@ func IsLogin(r *http.Request) bool {
 	}
 	_, ok := session.Values["username"]
 	return ok
+}
+
+func CheckPrivilege(r *http.Request, p common.PrivilegeSignal) bool {
+	session, err := store.Get(r, "account")
+	if err != nil {
+		panic(err.Error())
+	}
+	pi, ok := session.Values["privilege"]
+	if !ok {
+		return false
+	}
+	pnum, ok := pi.(int64)
+	if !ok {
+		return false
+	}
+	privilege := common.PrivilegeSignal(pnum)
+	if privilege&p > 0 {
+		return true
+	}
+	return false
 }
 
 func GetUserId(r *http.Request) int64 {

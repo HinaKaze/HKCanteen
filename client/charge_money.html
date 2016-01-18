@@ -1,0 +1,18 @@
+<div class="form-signin">
+    <h2>ChargeMoney:</h2> 
+    <input id="charge_num" type="text" class="form-control" placeholder="请输入金额" required></input>
+    <br/>
+    <input id="charge_submit" type="button" class="btn btn-lg btn-success">充值</input>
+</div>
+
+<script>
+    $("#charge_num").click(function(){
+        var chargeNum = $("#charge_num").val()
+        if (!isNaN(chargeNum)){
+            $.get("/charge_money?charge_num"+chargeNum,function(data,status){
+                showAlert("充值完成");
+                $("#main-content").html(data)
+            });
+        }
+    });
+</script>

@@ -29,11 +29,28 @@ $(document).ready(function(){
 		})
 		showAlert("被你发现了。。。啊，不，我什么也不知道")
 	})
-	order_own_list
-	$("#order_list").click(function(){
-		$.get("/order_list",function(data,status){
+	// $("#order_list").click(function(){
+	// 	$.get("/order_list",function(data,status){
+	// 		$("#right_list").html(data);
+	// 	})
+	// })
+	/*Some Test*/
+	$("#tts-submit").click(function(){
+		var t = $("#tts-text").val()
+		$("#tts-content").text(t)
+		if (t != ""){
+			if (t.length > 100)
+				t = t.substring(0,99);
+			var url ="http://api.voicerss.org/?key=fe1f1719cf7b47f69c3baa1e785a12b5&src="+t+"&hl=zh-tw&r=0"
+			//var audio = document.getElementById("tts-audio")
+			//audio.src = url
+			$("#tts-audio")[0].src = url
+			// $("#tts-audio")[0].play();
+		};
+	});
+	/*主页直接刷新列表*/
+	$.get("/order_list",function(data,status){
 			$("#right_list").html(data);
-		})
 	})
 });
 

@@ -109,3 +109,30 @@ func GetMyOrderList(userid int64) (orders []Order) {
 	}
 	return
 }
+
+func ChargeMoney(userid int64, num float64) (result int) {
+	if num <= 0 {
+		return 1
+	}
+	var user dao.DAOUser
+	if err := user.FetchFromDB(userid); err != nil {
+		panic(err.Error())
+	}
+	if user.Id <= 0 || userid != user.Id {
+		return 0
+	}
+	user.AccountAmount += num
+	if err := user.UpdateToDB(); err != nil {
+		panic(err.Error())
+	}
+	var alog dao.DAOAccountLog
+	alog.UserId = userid
+	alog.Time = time.Now()
+	alog.OrderId = -1
+	alog.Type = "charge"
+	alog.Value = num
+	if err := alog.SaveToDB(); err != nil {
+		panic(err.Error())
+	}
+	return 1
+}

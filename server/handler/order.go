@@ -8,10 +8,24 @@ import (
 	"HKCanteen/server/biz/accountlog"
 	"HKCanteen/server/biz/applicant"
 	"HKCanteen/server/biz/order"
+	"HKCanteen/server/common"
 )
 
-func CreateOrder(w http.ResponseWriter, r *http.Request) {
+func OrderManage(w http.ResponseWriter, r *http.Request) {
 	if IsLogin(r) {
+		t, _ := template.ParseFiles("./client/order.html")
+		t.Execute(w, nil)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func OrderCreate(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		if !CheckPrivilege(r, common.PrivilegeOrderCreate) {
+			w.Write([]byte("你没有发起活动的权限"))
+			return
+		}
 		err := r.ParseForm()
 		if err != nil {
 			panic(err.Error())
@@ -177,6 +191,33 @@ func GetMyAccountLog(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 		}
 		t.Execute(w, accountLog)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
+func ChargeMoney(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		if !CheckPrivilege(r, common.PrivilegeChargeMoney) {
+			w.Write([]byte("你没有充值的权限，你在逗我？"))
+			return
+		}
+		err := r.ParseForm()
+		if err != nil {
+			panic(err.Error())
+		}
+		numStr := r.Form.Get("charge_num")
+		chargeNum, err := strconv.ParseFloat(numStr, 64)
+		if err != nil {
+			w.Write([]byte("充值失败，输入参数错误"))
+			return
+		}
+		result := order.ChargeMoney(GetUserId(r), chargeNum)
+		if result > 0 {
+			w.Write([]byte("充值成功"))
+		} else {
+			w.Write([]byte("充值失败"))
+		}
 	} else {
 		w.Write([]byte("Nigger请登录"))
 	}
