@@ -26,21 +26,27 @@
 <body style="padding-top:10px">
     <div class="row">
         <div class="col-md-2">
-            <h4 id="tts-content"></h4>
+            <!--  <h4 id="tts-content"></h4>
             <input type="text" id="tts-text" placeholder="输入点什么吧。。。"></div>
             <br/>
             <button class="btn btn-sm btn-success" id="tts-submit">发射</button>
             <br/>
-            <div stype="display:none"><audio id="tts-audio" src="" autoplay loop></audio></div>
+            <div stype="display:none"><audio id="tts-audio" src="" autoplay loop></audio></div> -->
         </div>
         <div class="col-md-8 container">
             <h1 style="text-align:center">吔总会</h1>
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="/">没事别戳我增加服务器压力</a>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav_collapse">
+                            <span class="sr-only">切换导航</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">主页</a>
                     </div>
-                    <div class="collapse navbar-collapse">
+                    <div class="collapse navbar-collapse" id="nav_collapse">
                         <ul class="nav navbar-nav">
                             <li><a id="sign_in">登陆</a></li>
                             <li><a id="order_manage">活动管理</a></li>
@@ -50,7 +56,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">娱乐区<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a herf="#a">没想好的娱乐项目1</a></li>
-                                    <li><a href="#a">没想好的娱乐项目2</a></li>
+                                    <li><a id="charge_money">充值</a></li>
                                     <li><a id="fuli_list">福利仓库</a></li>
                                 </ul>
                             </li>
@@ -67,9 +73,9 @@
             <div id="main_content" style="background-color: #eee"></div>
         </div>
         <div class="col-md-2" id="right_list">
-            <button class="btn btn-sm btn-info center-block"   id="order_list">获取活动列表</button>
+            <button class="btn btn-sm btn-info center-block" id="order_list">获取活动列表</button>
             <br/>
-            <img src="/img/wang_mie_a.jpg" alt="望咩吖" class="center-block img-responsive"></img>
+            <!-- <img src="/img/wang_mie_a.jpg" alt="望咩吖" class="center-block img-responsive"></img> -->
         </div>
     </div>
 </body>

@@ -1,17 +1,24 @@
 <div class="form-signin">
-    <h2>ChargeMoney:</h2> 
+    <h2>User List:</h2>
+    {{range .}}
+    <h4>UserId : {{.Id}}  UserName : {{.NickName}}  账户余额 : ￥{{.AccountAmount}}</h2>
+    {{end}}
+
+    <h2>Charge:</h2>
+    <input id="charge_user" type="text" class="form-control" placeholder="请输入玩家ID" required></input>
     <input id="charge_num" type="text" class="form-control" placeholder="请输入金额" required></input>
     <br/>
-    <input id="charge_submit" type="button" class="btn btn-lg btn-success">充值</input>
+    <button id="charge_submit" type="button" class="btn btn-lg btn-success">充值</button>
 </div>
 
 <script>
-    $("#charge_num").click(function(){
+    $("#charge_submit").click(function(){
         var chargeNum = $("#charge_num").val()
-        if (!isNaN(chargeNum)){
-            $.get("/charge_money?charge_num"+chargeNum,function(data,status){
+        var chargeUser = $("#charge_user").val()
+        if (!isNaN(chargeNum) && !isNaN(chargeUser)){
+            $.get("/charge_money?charge_num="+chargeNum+"&charge_user="+chargeUser,function(data,status){
                 showAlert("充值完成");
-                $("#main-content").html(data)
+                $("#main_content").html(data)
             });
         }
     });

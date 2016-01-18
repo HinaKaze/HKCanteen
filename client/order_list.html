@@ -1,8 +1,7 @@
 <div class="form-signin">
     <button class="btn btn-sm btn-info center-block" id="order_list">刷新活动列表</button>
     <br/>
-    <h3>可参与的活动</h3> 
-    {{range .}}
+    <h3>可参与的活动</h3> {{range .}}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><text id="order_id{{.Order.Id}}">{{.Order.Id}}</text>     {{.Order.Desc}}</h3>
@@ -22,12 +21,19 @@
         var orderid = $("#order_id{{.Order.Id}}").text()
         $.get("/order_join?orderid=" + orderid, function(data, status) {
             showAlert("参加成功")
+            $.get("/order_detail?orderid=" + orderid, function(data, status) {
+                $("#main_content").html(data)
+            });
         });
+
     });
     $("#order_quit{{.Order.Id}}").click(function() {
         var orderid = $("#order_id{{.Order.Id}}").text()
         $.get("/order_quit?orderid=" + orderid, function(data, status) {
             showAlert("取消成功")
+            $.get("/order_detail?orderid=" + orderid, function(data, status) {
+                $("#main_content").html(data)
+            });
         });
     });
     $("#applicant_list{{.Order.Id}}").click(function() {
@@ -40,11 +46,10 @@
     </script>
     {{end}}
 </div>
-
 <script>
-	$("#order_list").click(function(){
-		$.get("/order_list",function(data,status){
-			$("#right_list").html(data);
-		})
-	})
+$("#order_list").click(function() {
+    $.get("/order_list", function(data, status) {
+        $("#right_list").html(data);
+    })
+})
 </script>

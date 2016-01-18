@@ -28,11 +28,19 @@
     $("#order_run").click(function(){
         var orderid = $("#order_id{{.Order.Order.Id}}").text()
         var totalprice = $("#total_price").val()
-        $.get("/order_run?orderid="+orderid+"&totalprice="+totalprice,null);
+        $.get("/order_run?orderid="+orderid+"&totalprice="+totalprice,function(data,status){
+            $.get("/order_detail?orderid=" + orderid, function(data, status) {
+                $("#main_content").html(data)
+            });
+        });
     });
      $("#order_close").click(function(){
         var orderid = $("#order_id{{.Order.Order.Id}}").text()
-        $.get("/order_close?orderid="+orderid,null);
+        $.get("/order_close?orderid="+orderid,function(data,status){
+            $.get("/order_detail?orderid=" + orderid, function(data, status) {
+                $("#main_content").html(data)
+            });
+        });
     });
     </script>
     {{end}} 
@@ -44,7 +52,11 @@
     <script>
     $("#order_finish").click(function(){
         var orderid = $("#order_id{{.Order.Order.Id}}").text()
-        $.get("/order_finish?orderid="+orderid,null);
+        $.get("/order_finish?orderid="+orderid,function(data,status){
+            $.get("/order_detail?orderid=" + orderid, function(data, status) {
+                $("#main_content").html(data)
+            });
+        });
     });
     </script>
     {{end}} 

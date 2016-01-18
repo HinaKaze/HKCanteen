@@ -8,6 +8,7 @@ import (
 	"HKCanteen/server/biz/accountlog"
 	"HKCanteen/server/biz/applicant"
 	"HKCanteen/server/biz/order"
+	"HKCanteen/server/biz/user"
 	"HKCanteen/server/common"
 )
 
@@ -196,10 +197,23 @@ func GetMyAccountLog(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func ChargeView(w http.ResponseWriter, r *http.Request) {
+	if IsLogin(r) {
+		t, err := template.ParseFiles("./client/charge_money.html")
+		if err != nil {
+			panic(err.Error())
+		}
+		users := user.GetUserList()
+		t.Execute(w, users)
+	} else {
+		w.Write([]byte("Nigger请登录"))
+	}
+}
+
 func ChargeMoney(w http.ResponseWriter, r *http.Request) {
 	if IsLogin(r) {
 		if !CheckPrivilege(r, common.PrivilegeChargeMoney) {
-			w.Write([]byte("你没有充值的权限，你在逗我？"))
+			w.Write([]byte("少年你想多了，你没有权限"))
 			return
 		}
 		err := r.ParseForm()
@@ -207,12 +221,14 @@ func ChargeMoney(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 		}
 		numStr := r.Form.Get("charge_num")
-		chargeNum, err := strconv.ParseFloat(numStr, 64)
-		if err != nil {
+		chargeNum, err1 := strconv.ParseFloat(numStr, 64)
+		userStr := r.Form.Get("charge_user")
+		chargeUser, err2 := strconv.ParseInt(userStr, 10, 64)
+		if err1 != nil || err2 != nil {
 			w.Write([]byte("充值失败，输入参数错误"))
 			return
 		}
-		result := order.ChargeMoney(GetUserId(r), chargeNum)
+		result := order.ChargeMoney(chargeUser, chargeNum)
 		if result > 0 {
 			w.Write([]byte("充值成功"))
 		} else {

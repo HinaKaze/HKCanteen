@@ -64,3 +64,21 @@ func GetUserByUsername(username string) (user DAOUser) {
 	}
 	return
 }
+
+func GetAllUsers() (users []DAOUser) {
+	sql := `select id,username,password,nickname,accountamount,privilege from user`
+	rows, err := canteenDBConn.Query(sql)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var user DAOUser
+		err = rows.Scan(&user.Id, &user.Username, &user.Password, &user.NickName, &user.AccountAmount, &user.Privilege)
+		if err != nil {
+			panic(err.Error())
+		}
+		users = append(users, user)
+	}
+	return
+}

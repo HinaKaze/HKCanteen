@@ -151,11 +151,13 @@ func CheckPrivilege(r *http.Request, p common.PrivilegeSignal) bool {
 	if !ok {
 		return false
 	}
-	pnum, ok := pi.(int64)
+	pint, ok := pi.(int)
 	if !ok {
 		return false
 	}
+	pnum := int64(pint)
 	privilege := common.PrivilegeSignal(pnum)
+	log.Println(privilege)
 	if privilege&p > 0 {
 		return true
 	}

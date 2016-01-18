@@ -40,7 +40,8 @@ func main() {
 	http.HandleFunc("/fuli_list", handler.FuliList)
 
 	http.HandleFunc("/account_detail", handler.GetMyAccountLog)
-	http.HandleFunc("/charge_num", handler.ChargeMoney)
+	http.HandleFunc("/charge_view", handler.ChargeView)
+	http.HandleFunc("/charge_money", handler.ChargeMoney)
 
 	http.HandleFunc("/favicon.ico", handler.Favicon)
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("./client/img"))))

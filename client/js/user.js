@@ -48,6 +48,11 @@ $(document).ready(function(){
 			// $("#tts-audio")[0].play();
 		};
 	});
+	$("#charge_money").click(function(){
+		$.get("/charge_view",function(data,status){
+			$("#main_content").html(data);
+		})
+	})
 	/*主页直接刷新列表*/
 	$.get("/order_list",function(data,status){
 			$("#right_list").html(data);

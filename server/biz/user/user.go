@@ -21,3 +21,8 @@ func Login(username string, password string) (user dao.DAOUser, result int) {
 		return user, ResultNotMatch
 	}
 }
+
+func GetUserList() (users []dao.DAOUser) {
+	users = dao.GetAllUsers()
+	return
+}
