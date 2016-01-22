@@ -1,0 +1,38 @@
+<div>
+    <h2>Chat room</h2>
+    <table id="chat_table" class="table table-bordered">
+        <tbody id="chat_index"><tr><td></td><td></td></tr></tbody>
+    </table>
+    <button id="chat_enter" class="btn btn-sm btn-info"></button>
+    <br/>
+    <input id="chat_input" class="form-control" name="chat_input" placeholder="input text msg"></input>
+    <br/>
+    <button id="chat_send" class="btn btn-sm btn-success"></button>
+</div>
+<script>
+var conn
+var chat_index = $("#chat_index")
+var chat_table = $("#chat_table")
+$("#chat_enter").click(function() {
+    wsconnect()
+});
+
+conn.onclose = function(evt) {
+    appendLog($("<div><b>Connection closed.</b></div>"))
+}
+conn.onmessage = function(evt) {
+    appendLog($("<div/>").text(evt.data))
+}
+$("#chat_send").click(function(){
+    var msg = $("#chat_input").val()
+    send_msg(msg)
+});
+
+function show_msg(msg){
+
+}
+
+function wsconnect(){
+    conn = new WebSocket("ws://{{.}}/chat_enter")
+}
+</script>
