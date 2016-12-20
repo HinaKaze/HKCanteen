@@ -1,7 +1,7 @@
 package accountlog
 
 import (
-	"HKCanteen/server/dao"
+	"github.com/HinaKaze/canteen/server/dao"
 )
 
 type AccountLog struct {

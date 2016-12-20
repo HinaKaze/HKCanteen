@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"HKCanteen/server/biz/user"
-	"HKCanteen/server/common"
+	"github.com/HinaKaze/canteen/server/biz/user"
+	"github.com/HinaKaze/canteen/server/common"
 
 	"github.com/gorilla/sessions"
 )

@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"HKCanteen/content"
-	"HKCanteen/server/handler"
+	"github.com/HinaKaze/canteen/content"
+	"github.com/HinaKaze/canteen/server/handler"
 )
 
 var Quit chan int

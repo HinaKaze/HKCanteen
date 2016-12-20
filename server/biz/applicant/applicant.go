@@ -1,7 +1,7 @@
 package applicant
 
 import (
-	"HKCanteen/server/dao"
+	"github.com/HinaKaze/canteen/server/dao"
 )
 
 type Applicant struct {

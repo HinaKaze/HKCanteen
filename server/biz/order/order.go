@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"HKCanteen/server/biz/applicant"
-	"HKCanteen/server/dao"
+	"github.com/HinaKaze/canteen/server/biz/applicant"
+	"github.com/HinaKaze/canteen/server/dao"
 )
 
 type Order struct {

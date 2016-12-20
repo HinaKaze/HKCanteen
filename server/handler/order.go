@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"HKCanteen/server/biz/accountlog"
-	"HKCanteen/server/biz/applicant"
-	"HKCanteen/server/biz/order"
-	"HKCanteen/server/biz/user"
-	"HKCanteen/server/common"
+	"github.com/HinaKaze/canteen/server/biz/accountlog"
+	"github.com/HinaKaze/canteen/server/biz/applicant"
+	"github.com/HinaKaze/canteen/server/biz/order"
+	"github.com/HinaKaze/canteen/server/biz/user"
+	"github.com/HinaKaze/canteen/server/common"
 )
 
 func OrderManage(w http.ResponseWriter, r *http.Request) {

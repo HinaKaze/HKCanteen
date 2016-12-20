@@ -1,10 +1,11 @@
 package content
 
 import (
-	"HKCanteen/server/dao"
-	"HKCanteen/tools/iniparse"
 	"database/sql"
 	"fmt"
+
+	"github.com/HinaKaze/canteen/server/dao"
+	"github.com/HinaKaze/canteen/tools/iniparse"
 
 	_ "github.com/go-sql-driver/mysql"
 )

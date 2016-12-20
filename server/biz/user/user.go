@@ -1,7 +1,7 @@
 package user
 
 import (
-	"HKCanteen/server/dao"
+	"github.com/HinaKaze/canteen/server/dao"
 )
 
 const (
